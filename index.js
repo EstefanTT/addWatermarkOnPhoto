@@ -9,13 +9,13 @@ const { readdirSync, existsSync, mkdirSync } = require('fs')
 //######################################################      VARIABLES      ################################################################
 //###########################################################################################################################################
 
-appRoot = __dirname.split('addWatermarkOnPhoto')[0] + 'addWatermarkOnPhoto'
+// appRoot = __dirname.split('addWatermarkOnPhoto')[0] + 'addWatermarkOnPhoto'
 
 const settings = require('./settings.json')
 
 const directoriesPathToCreate = [
-    appRoot + '/photosWithoutWatermark/',
-    appRoot + '/photosWithWatermark/',
+    './photosWithoutWatermark/',
+    './photosWithWatermark/',
 ]
 
 const format = process.argv[2]
@@ -28,8 +28,8 @@ async function addWatermarkToImage(fileName, format) {
     try {
 
         // Load the watermark and the target image
-        const watermark = await Jimp.read(appRoot +  '/media/copperPlate.png');
-        const image = await Jimp.read(appRoot + `/photosWithoutWatermark/${fileName}`);
+        const watermark = await Jimp.read('./media/copperPlate.png');
+        const image = await Jimp.read(`./photosWithoutWatermark/${fileName}`);
 
         // Resize the watermark
         const watermark_newWidth = Math.round(image.bitmap.width * (settings.copperPlatePercentageOfImageWidth / 100));
@@ -56,7 +56,7 @@ async function addWatermarkToImage(fileName, format) {
         });
 
         // Save the image with watermark
-        await image.writeAsync(appRoot + `/photosWithWatermark/${fileName}`);
+        await image.writeAsync(`./photosWithWatermark/${fileName}`);
     } catch (error) {
         console.error('An error occurred:', error);
     }
@@ -95,11 +95,13 @@ function launch() {
         return
     }
 
-    const files = readdirSync(appRoot + '/photosWithoutWatermark')
+    const files = readdirSync('./photosWithoutWatermark')
 
     files.forEach(fileName => {
         addWatermarkToImage(fileName, format)
     })
+
+    console.log("Operation finished, your photos should be in the 'photosWithWatermark' directory.")
 }
 
 launch()
