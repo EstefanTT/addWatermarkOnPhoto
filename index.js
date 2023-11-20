@@ -1,5 +1,9 @@
 const Jimp = require('jimp');
+const webp = require('webp-converter');
+
+const path = require('path');
 const { readdirSync, existsSync, mkdirSync } = require('fs')
+
 
 //###########################################################################################################################################
 //####################################################      INSTRUCTIONS      ###############################################################
@@ -24,12 +28,29 @@ const format = process.argv[2]
 //######################################################      FUNCTIONS      ################################################################
 //###########################################################################################################################################
 
+async function convertWebPToPNG(filePath) {
+    const outputFilePath = filePath.replace('.webp', '.png');
+    await webp.dwebp(filePath, outputFilePath, "-o");
+    return outputFilePath;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 async function addWatermarkToImage(fileName, format) {
     try {
 
+        let imagePath = `./photosWithoutWatermark/${fileName}`;
+        const fileExtension = path.extname(imagePath).toLowerCase();
+
+        // Check if the image is a WebP file and convert it if necessary
+        if (fileExtension === '.webp') {
+            imagePath = await convertWebPToPNG(imagePath);
+            fileName = path.basename(imagePath); // Update fileName with new extension
+        }
+
         // Load the watermark and the target image
         const watermark = await Jimp.read('./media/copperPlate.png');
-        const image = await Jimp.read(`./photosWithoutWatermark/${fileName}`);
+        const image = await Jimp.read(imagePath);
 
         // Resize the watermark
         const watermark_newWidth = Math.round(image.bitmap.width * (settings.copperPlatePercentageOfImageWidth / 100));
@@ -91,7 +112,7 @@ function createAllNonGitTrackedDirectories(directoriesPathToCreate) {
 // const fileNames = ['image1.jpg', 'image2.png']; // Replace with your actual file names array
 // fileNames.forEach(fileName => addWatermarkToImage(fileName));
 
-function launch() {
+async function launch() {
 
     createAllNonGitTrackedDirectories(directoriesPathToCreate)
 
@@ -103,9 +124,13 @@ function launch() {
 
     const files = readdirSync('./photosWithoutWatermark')
 
-    files.forEach(fileName => {
-        addWatermarkToImage(fileName, format)
-    })
+    for (const fileName of files) {
+        await addWatermarkToImage(fileName, format);
+    }
+
+    // files.forEach(fileName => {
+    //     addWatermarkToImage(fileName, format)
+    // })
 
     console.log("Operation finished, your photos should be in the 'photosWithWatermark' directory.")
 }
