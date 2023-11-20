@@ -56,7 +56,13 @@ async function addWatermarkToImage(fileName, format) {
         });
 
         // Save the image with watermark
-        await image.writeAsync(`./photosWithWatermark/${fileName}`);
+        if (format === 'website') {
+            await image.writeAsync(`./photosWithWatermark/${fileName}`);
+        } else if (format === 'instagram') {
+            fileName = fileName.split('.')[0] + '_instagram.' + fileName.split('.')[1]
+            await image.writeAsync(`./photosWithWatermark/${fileName}`);
+        }
+
     } catch (error) {
         console.error('An error occurred:', error);
     }
