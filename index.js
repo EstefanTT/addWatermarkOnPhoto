@@ -76,6 +76,9 @@ async function addWatermarkToImage(fileName, format) {
             opacityDest: 1.0
         });
 
+        // Remove the space in the filenames
+        fileName = fileName.replaceAll(' ', '_')
+
         // Save the image with watermark
         if (format === 'website') {
             await image.writeAsync(`./photosWithWatermark/${fileName}`);
