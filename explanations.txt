@@ -4,7 +4,7 @@
 
 - You can edit the margins and size of the "evokeheart plate" by openning this file: settings.json
 
-### How to use the program
+### How to add the Evokeheart copper plate ?
 
 - Put the pictures in the "photosWithoutWatermark" directory 
 - Open the terminal (black window to write the code). It is in the apps bar of your computer.
@@ -14,6 +14,19 @@
 
 - If you want website pictures, run this command:   node index website
 - If you want Instagram pictures, run this command:  node index instagram
+
+- After that, the pictures with the watermark are in the "photosWithWatermark" directory.
+- Don't forget to remove the pictures from "photosWithWatermark" & "photosWithoutWatermark" when you finish ;)
+
+### How to add the Evokeheart protection watermark ?
+
+- Put the pictures in the "photosWithoutWatermark" directory 
+- Open the terminal (black window to write the code). It is in the apps bar of your computer.
+- Click on the Linux penguin
+
+- Type "cd addWatermarkOnPhotos" and enter. Or faster type "cd add" than "tab" when enter.
+
+- run this command:   node index protection
 
 - After that, the pictures with the watermark are in the "photosWithWatermark" directory.
 - Don't forget to remove the pictures from "photosWithWatermark" & "photosWithoutWatermark" when you finish ;)
